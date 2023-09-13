@@ -6,7 +6,7 @@
 /*   By: thibaultgiraudon <thibaultgiraudon@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 13:11:57 by thibaultgir       #+#    #+#             */
-/*   Updated: 2023/09/13 12:21:35 by thibaultgir      ###   ########.fr       */
+/*   Updated: 2023/09/13 12:59:52 by thibaultgir      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ enum {
     INT,
     FLOAT,
     DOUBLE,
-    INVALID
+    INVALID,
+    STRING
 };
 
 class ScalarConvert {

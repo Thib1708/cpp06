@@ -6,7 +6,7 @@
 /*   By: thibaultgiraudon <thibaultgiraudon@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 13:11:57 by thibaultgir       #+#    #+#             */
-/*   Updated: 2023/09/13 12:45:08 by thibaultgir      ###   ########.fr       */
+/*   Updated: 2023/09/13 13:11:22 by thibaultgir      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,12 @@ bool ScalarConvert::isInt( void ) {
 }
 
 bool ScalarConvert::isFloat( void ) {
+	if (this->_str == "nan" || this->_str == "-inf" || this->_str == "+inf" || \
+		this->_str == "nanf" || this->_str == "-inff" || this->_str == "+inff" )
+	{
+		this->_type = STRING;
+		return (true);
+	}
 	if (this->_str[this->_index] == '.')
 	{
 		this->_index++;
@@ -93,25 +99,45 @@ bool ScalarConvert::isFloat( void ) {
 }
 
 void	ScalarConvert::printChar( void ) const {
-	if (this->_c < 32 || this->_c > 126)
+	if (this->_type == STRING)
+		std::cout << "impossible" << std::endl;
+	else if (this->_c < 32 || this->_c > 126)
 		std::cout << "non printable character" << std::endl;
 	else
 		std::cout << "'" << this->_c << "'" << std::endl;
 }
 
 void	ScalarConvert::printInt( void ) const {
-	std::cout << this->_i << std::endl;
+	if (this->_type == STRING)
+		std::cout << "impossible" << std::endl;
+	else 
+		std::cout << this->_i << std::endl;
 }
 
 void	ScalarConvert::printFloat( void ) const {
-	if (this->_type == INT)
+	if (this->_type == STRING)
+	{
+		if (this->_str == "nan" || this->_str == "-inf" || this->_str == "+inf")
+			std::cout << this->_str << "f" << std::endl;
+		else
+			std::cout << this->_str << std::endl;
+	}
+	else if (this->_type == INT || this->_type == CHAR)
 		std::cout << this->_f << ".0f" << std::endl;
 	else
 		std::cout << this->_f << "f" << std::endl;
 }
 
 void	ScalarConvert::printDouble( void ) const {
-	if (this->_type == INT)
+	if (this->_str == "nanf")
+		std::cout << "nan" << std::endl;
+	else if (this->_str == "-inff")
+		std::cout << "-inf" << std::endl;
+	else if (this->_str == "+inff")
+		std::cout << "+inf" << std::endl;
+	else if (this->_type == STRING)
+		std::cout << this->_str << std::endl;
+	else if (this->_type == INT || this->_type == CHAR)
 		std::cout << this->_f << ".0" << std::endl;
 	else
 		std::cout << this->_d << std::endl;
@@ -151,6 +177,9 @@ void ScalarConvert::convert( std::string str ) {
 			this->_c = static_cast<char>(this->_d);
 			this->_i = static_cast<int>(this->_d);
 			this->_f = static_cast<float>(this->_d);
+			break ;
+		}
+		case STRING: {
 			break ;
 		}
 		default: {
