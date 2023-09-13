@@ -6,7 +6,7 @@
 /*   By: thibaultgiraudon <thibaultgiraudon@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 13:11:57 by thibaultgir       #+#    #+#             */
-/*   Updated: 2023/09/13 13:11:22 by thibaultgir      ###   ########.fr       */
+/*   Updated: 2023/09/13 13:15:06 by thibaultgir      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ void	ScalarConvert::printChar( void ) const {
 	if (this->_type == STRING)
 		std::cout << "impossible" << std::endl;
 	else if (this->_c < 32 || this->_c > 126)
-		std::cout << "non printable character" << std::endl;
+		std::cout << "Non displayable" << std::endl;
 	else
 		std::cout << "'" << this->_c << "'" << std::endl;
 }
