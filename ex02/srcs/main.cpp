@@ -6,7 +6,7 @@
 /*   By: thibaultgiraudon <thibaultgiraudon@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 16:10:33 by thibaultgir       #+#    #+#             */
-/*   Updated: 2023/09/13 16:35:25 by thibaultgir      ###   ########.fr       */
+/*   Updated: 2023/09/19 17:51:35 by thibaultgir      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,12 +37,32 @@ Base * generate( void ) {
 
 void	identify(Base* p)
 {
-	if(dynamic_cast<A *>(p))
-		std::cout << "Base type is A" << std::endl;
-	else if(dynamic_cast<B *>(p))
-		std::cout << "Base type is B" << std::endl;
-	else if(dynamic_cast<C *>(p))
-		std::cout << "Base type is C" << std::endl;
+	try
+	{
+		if (dynamic_cast<A *>(p))
+			std::cout << "Base type is A" << std::endl;
+	}
+	catch(std::exception& e){}
+	try
+	{
+		if (dynamic_cast<B *>(p))
+			std::cout << "Base type is B" << std::endl;
+	}
+	catch(std::exception& e){}
+	try
+	{
+		if (dynamic_cast<C *>(p))
+			std::cout << "Base type is C" << std::endl;
+	}
+	catch(std::exception& e){}
+	
+	
+	// if(dynamic_cast<A *>(p))
+	// 	std::cout << "Base type is A" << std::endl;
+	// else if(dynamic_cast<B *>(p))
+	// 	std::cout << "Base type is B" << std::endl;
+	// else if(dynamic_cast<C *>(p))
+	// 	std::cout << "Base type is C" << std::endl;
 }
 
 void	identify(Base& p)
