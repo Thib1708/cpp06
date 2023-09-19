@@ -6,7 +6,7 @@
 /*   By: thibaultgiraudon <thibaultgiraudon@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 13:11:57 by thibaultgir       #+#    #+#             */
-/*   Updated: 2023/09/19 17:18:01 by thibaultgir      ###   ########.fr       */
+/*   Updated: 2023/09/19 17:46:15 by thibaultgir      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ void	ScalarConvert::printChar( int type, char c, int i ) {
 void	ScalarConvert::printInt( int type, int i, double d ) {
 	if (type == STRING)
 		std::cout << "impossible" << std::endl;
-	else if (d != i)
+	else if (d > std::numeric_limits<int>::max() || d < std::numeric_limits<int>::min())
 		std::cout << "overflow" << std::endl;
 	else 
 		std::cout << i << std::endl;
@@ -118,7 +118,7 @@ void	ScalarConvert::printFloat( int type, std::string str, int i, float f, doubl
 		else
 			std::cout << str << std::endl;
 	}
-	else if (abs(d - f) > 0.0001)
+	else if (d > std::numeric_limits<float>::max() || d < -std::numeric_limits<float>::max())
 		std::cout << "overflow" << std::endl;
 	else if (f - i == 0)
 		std::cout << f << ".0f" << std::endl;
@@ -143,6 +143,7 @@ void	ScalarConvert::printDouble( int type, std::string str, int i, float f, doub
 
 void ScalarConvert::convert( std::string str ) {
 	int type;
+	long int	li;
 	size_t index = 0;
 	char c;
 	int i;
@@ -162,40 +163,40 @@ void ScalarConvert::convert( std::string str ) {
 			break ;
 		}
 		case INT: {
-			iss >> d;
-			c = static_cast<char>(d);
-			i = static_cast<int>(d);
-			f = static_cast<float>(d);
-			if (d != i)
+			li = std::strtol(str.c_str(), NULL, 10);
+			if (li > std::numeric_limits<int>::max() || li < std::numeric_limits<int>::min())
 			{
-				std::cout << "[ ERROR ] : int overflow" << std::endl;
+				std::cout << RED << "[ERROR] " << RESET << "The 'integer' type is impossible to convert (Overflow)." << std::endl;
 				return ;
 			}
+			i = static_cast<int>(li);
+			c = static_cast<char>(i);
+			d = static_cast<double>(i);
+			f = static_cast<float>(i);
 			break ;
 		}
 		case FLOAT: {
-			iss >> d;
-			c = static_cast<char>(d);
-			i = static_cast<int>(d);
-			f = static_cast<float>(d);
-			if (abs(d - f) > 0.0001)
+			f = std::strtof(str.c_str(), NULL);
+			if (f == HUGE_VAL)
 			{
-				std::cout << "[ ERROR ] : float overflow" << std::endl;
+				std::cout << RED << "[ERROR] " << RESET << "The 'integer' type is impossible to convert (Overflow)." << std::endl;
 				return ;
 			}
+			c = static_cast<char>(f);
+			i = static_cast<int>(f);
+			d = static_cast<float>(f);
 			break ;
 		}
 		case DOUBLE: {
-			iss >> d;
+			d = std::strtod(str.c_str(), NULL);
+			if (d == HUGE_VAL)
+			{
+				std::cout << RED << "[ERROR] " << RESET << "The 'integer' type is impossible to convert (Overflow)." << std::endl;
+				return ;
+			}
 			c = static_cast<char>(d);
 			i = static_cast<int>(d);
 			f = static_cast<float>(d);
-			double d1 = std::strtod(str.c_str(), NULL);
-			if (d1 == HUGE_VAL)
-			{
-				std::cout << "[ ERROR ] : double overflow" << std::endl;
-				return ;
-			}
 			break ;
 		}
 		case STRING: {
@@ -211,7 +212,7 @@ void ScalarConvert::convert( std::string str ) {
 	std::cout << "char: ";
 	ScalarConvert::printChar(type, c, i);
 	std::cout << "int: ";
-	ScalarConvert::printInt(type, c, i);
+	ScalarConvert::printInt(type, i, d);
 	std::cout << "float: ";
 	ScalarConvert::printFloat(type, str, i, f, d);
 	std::cout << "double: ";
