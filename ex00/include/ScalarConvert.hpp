@@ -6,7 +6,7 @@
 /*   By: thibaultgiraudon <thibaultgiraudon@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 13:11:57 by thibaultgir       #+#    #+#             */
-/*   Updated: 2023/09/13 12:59:52 by thibaultgir      ###   ########.fr       */
+/*   Updated: 2023/09/19 17:00:20 by thibaultgir      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 #include <iostream>
 #include <sstream>
+#include <stdlib.h>
 
 enum {
     CHAR,
@@ -27,29 +28,23 @@ enum {
 
 class ScalarConvert {
     private:
-        std::string         _str;
-        unsigned long       _index;
-        int                 _type;
-        char    _c;
-        int     _i;
-        float   _f;
-        double  _d;
+
     public:
         ScalarConvert( void );
         ~ScalarConvert( void );
         ScalarConvert( const ScalarConvert & );
         ScalarConvert& operator=( const ScalarConvert &);
 
-        int	getType( void ) const;
+        static int	getType( void );
         
-        void    convert( std::string str );
-        bool isChar( void );
-        bool isInt( void );
-        bool isFloat( void );
-        void    printChar( void ) const;
-        void    printInt( void ) const;
-        void    printFloat( void ) const;
-        void    printDouble( void ) const;
+        static void    convert( std::string str );
+        static bool isChar( std::string &str, int &type );
+        static bool isInt( std::string &str, int &type, size_t &index );
+        static bool isFloat( std::string &str, int &type, size_t &index );
+        static void    printChar( int type, char c, int i );
+        static void    printInt( int type, int i, double d );
+        static void    printFloat( int type, std::string str, int i, float f, double d );
+        static void    printDouble( int type, std::string str, int i, float f, double d );
         // bool isDouble( std::string str );
 };
 

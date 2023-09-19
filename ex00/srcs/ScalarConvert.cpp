@@ -6,7 +6,7 @@
 /*   By: thibaultgiraudon <thibaultgiraudon@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 13:11:57 by thibaultgir       #+#    #+#             */
-/*   Updated: 2023/09/13 13:15:06 by thibaultgir      ###   ########.fr       */
+/*   Updated: 2023/09/19 17:01:47 by thibaultgir      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 
 ScalarConvert::ScalarConvert( void ) {
 	// std::cout << "[ SCALARCONVERT ] Constructor called" << std::endl;
-	this->_index = 0;
-	this->_type = INVALID;
 	return ;
 }
 
@@ -32,151 +30,171 @@ ScalarConvert::ScalarConvert( const ScalarConvert &copy ) {
 
 ScalarConvert& ScalarConvert::operator=( const ScalarConvert &copy ) {
 	std::cout << "[ SCALARCONVERT ]  Assignement operator called" << std::endl;
-	this->_index = copy._index;
-	this->_type = copy._type;
+	(void)copy;
 	return *this;
 }
 
-int	ScalarConvert::getType( void ) const {
-	return (this->_type);
-}
-
-bool ScalarConvert::isChar( void ) {
-	if (this->_str.length() == 1 && ((this->_str[0] > 31 && this->_str[0] < 48) || (this->_str[0] > 57 && this->_str[0] < 127)))
+bool ScalarConvert::isChar( std::string &str, int &type ) {
+	if (str.length() == 1 && ((str[0] > 31 && str[0] < 48) || (str[0] > 57 && str[0] < 127)))
 	{
-		this->_type = CHAR;
+		type = CHAR;
 		return (true);
 	}
 	return (false);
 }
 
-bool ScalarConvert::isInt( void ) {
-	this->_index = 0;
-	if (this->_str[this->_index] == '+' || this->_str[this->_index] == '-')
-		this->_index++;
-	while (this->_str[this->_index] && std::isdigit(this->_str[this->_index]))
-		this->_index++;
-	if (this->_index != this->_str.length())
+bool ScalarConvert::isInt( std::string &str, int &type, size_t &index ) {
+	index = 0;
+	if (str[index] == '+' || str[index] == '-')
+		index++;
+	while (str[index] && std::isdigit(str[index]))
+		index++;
+	if (index != str.length())
 		return (false);
-	this->_type = INT;
+	type = INT;
 	return (true);
 }
 
-bool ScalarConvert::isFloat( void ) {
-	if (this->_str == "nan" || this->_str == "-inf" || this->_str == "+inf" || \
-		this->_str == "nanf" || this->_str == "-inff" || this->_str == "+inff" )
+bool ScalarConvert::isFloat( std::string &str, int &type, size_t &index ) {
+	if (str == "nan" || str == "-inf" || str == "+inf" || \
+		str == "nanf" || str == "-inff" || str == "+inff" )
 	{
-		this->_type = STRING;
+		type = STRING;
 		return (true);
 	}
-	if (this->_str[this->_index] == '.')
+	if (str[index] == '.')
 	{
-		this->_index++;
-		while(this->_str[this->_index])
+		index++;
+		while(str[index])
 		{
-			if ((this->_str[this->_index] < 48 || this->_str[this->_index] > 57) && this->_str[this->_index] != 'f')
+			if ((str[index] < 48 || str[index] > 57) && str[index] != 'f')
 				return (false);
-			if (this->_str[this->_index] == 'f' && this->_index != this->_str.length() - 1)
+			if (str[index] == 'f' && index != str.length() - 1)
 				return (false);
-			this->_index++;
+			index++;
 		}
-		if (this->_str[this->_index - 1] == 'f')
+		if (str[index - 1] == 'f')
 		{
-			this->_str[this->_index - 1] = '\0';
-			this->_type = FLOAT;
+			str[index - 1] = '\0';
+			type = FLOAT;
 			return (true);
 		}
-		this->_type = DOUBLE;
+		type = DOUBLE;
 		return (true);
 	}
-	if (this->_str[this->_index] == 'f' && this->_index == this->_str.length() - 1)
+	if (str[index] == 'f' && index == str.length() - 1)
 	{
-		this->_str[this->_index] = '\0';
-		this->_type = FLOAT;
+		str[index] = '\0';
+		type = FLOAT;
 		return (true);
 	}
 	return (false);
 }
 
-void	ScalarConvert::printChar( void ) const {
-	if (this->_type == STRING)
+void	ScalarConvert::printChar( int type, char c, int i ) {
+	if (type == STRING)
 		std::cout << "impossible" << std::endl;
-	else if (this->_c < 32 || this->_c > 126)
+	else if (i < 32 || i > 126)
 		std::cout << "Non displayable" << std::endl;
 	else
-		std::cout << "'" << this->_c << "'" << std::endl;
+		std::cout << "'" << c << "'" << std::endl;
 }
 
-void	ScalarConvert::printInt( void ) const {
-	if (this->_type == STRING)
+void	ScalarConvert::printInt( int type, int i, double d ) {
+	if (type == STRING)
 		std::cout << "impossible" << std::endl;
+	else if (d != i)
+		std::cout << "overflow" << std::endl;
 	else 
-		std::cout << this->_i << std::endl;
+		std::cout << i << std::endl;
 }
 
-void	ScalarConvert::printFloat( void ) const {
-	if (this->_type == STRING)
+void	ScalarConvert::printFloat( int type, std::string str, int i, float f, double d ) {
+	if (type == STRING)
 	{
-		if (this->_str == "nan" || this->_str == "-inf" || this->_str == "+inf")
-			std::cout << this->_str << "f" << std::endl;
+		if (str == "nan" || str == "-inf" || str == "+inf")
+			std::cout << str << "f" << std::endl;
 		else
-			std::cout << this->_str << std::endl;
+			std::cout << str << std::endl;
 	}
-	else if (this->_type == INT || this->_type == CHAR)
-		std::cout << this->_f << ".0f" << std::endl;
+	else if (d != f)
+		std::cout << "overflow" << std::endl;
+	else if (f - i == 0)
+		std::cout << f << ".0f" << std::endl;
 	else
-		std::cout << this->_f << "f" << std::endl;
+		std::cout << f << "f" << std::endl;
 }
 
-void	ScalarConvert::printDouble( void ) const {
-	if (this->_str == "nanf")
+void	ScalarConvert::printDouble( int type, std::string str, int i, float f, double d ) {
+	if (str == "nanf")
 		std::cout << "nan" << std::endl;
-	else if (this->_str == "-inff")
+	else if (str == "-inff")
 		std::cout << "-inf" << std::endl;
-	else if (this->_str == "+inff")
+	else if (str == "+inff")
 		std::cout << "+inf" << std::endl;
-	else if (this->_type == STRING)
-		std::cout << this->_str << std::endl;
-	else if (this->_type == INT || this->_type == CHAR)
-		std::cout << this->_f << ".0" << std::endl;
+	else if (type == STRING)
+		std::cout << str << std::endl;
+	else if (d - i == 0)
+		std::cout << f << ".0" << std::endl;
 	else
-		std::cout << this->_d << std::endl;
+		std::cout << d << std::endl;
 }
 
 void ScalarConvert::convert( std::string str ) {
-	this->_str = str;
-	if (!isChar())
-		if (!isInt())
-			if (!isFloat())
-				this->_type = INVALID;
-	std::istringstream iss(this->_str);
-	switch (this->_type) {
+	int type;
+	size_t index = 0;
+	char c;
+	int i;
+	float f;
+	double d;
+	if (!isChar(str, type))
+		if (!isInt(str, type, index))
+			if (!isFloat(str, type, index))
+				type = INVALID;
+	std::istringstream iss(str);
+	switch (type) {
 		case CHAR: {
-			this->_c = this->_str[0];
-			this->_i = static_cast<int>(this->_c);
-			this->_f = static_cast<float>(this->_c);
-			this->_d = static_cast<double>(this->_c);
+			c = str[0];
+			i = static_cast<int>(c);
+			f = static_cast<float>(c);
+			d = static_cast<double>(c);
 			break ;
 		}
 		case INT: {
-			iss >> this->_i;
-			this->_c = static_cast<char>(this->_i);
-			this->_f = static_cast<float>(this->_i);
-			this->_d = static_cast<double>(this->_i);
+			iss >> d;
+			c = static_cast<char>(d);
+			i = static_cast<int>(d);
+			f = static_cast<float>(d);
+			if (d != i)
+			{
+				std::cout << "[ ERROR ] : int overflow" << std::endl;
+				return ;
+			}
 			break ;
 		}
 		case FLOAT: {
-			iss >> this->_f;
-			this->_c = static_cast<char>(this->_f);
-			this->_i = static_cast<int>(this->_f);
-			this->_d = static_cast<double>(this->_f);
+			iss >> d;
+			c = static_cast<char>(d);
+			i = static_cast<int>(d);
+			f = static_cast<float>(d);
+			if (d != f)
+			{
+				std::cout << "[ ERROR ] : float overflow" << std::endl;
+				return ;
+			}
 			break ;
 		}
 		case DOUBLE: {
-			iss >> this->_d;
-			this->_c = static_cast<char>(this->_d);
-			this->_i = static_cast<int>(this->_d);
-			this->_f = static_cast<float>(this->_d);
+			iss >> d;
+			c = static_cast<char>(d);
+			i = static_cast<int>(d);
+			f = static_cast<float>(d);
+			double d1 = std::strtod(str.c_str(), NULL);
+			if (d1 == HUGE_VAL)
+			{
+				std::cout << "[ ERROR ] : double overflow" << std::endl;
+				return ;
+			}
 			break ;
 		}
 		case STRING: {
@@ -186,21 +204,14 @@ void ScalarConvert::convert( std::string str ) {
 			break ;
 		}	
 	}
-}
-
-std::ostream &operator<<( std::ostream &out, ScalarConvert const &convert ) {
-	if (convert.getType() == INVALID)
-	{
-		out << "This input makes no sense!";
-		return (out);
-	}
-	out << "char: ";
-	convert.printChar();
-	out << "int: ";
-	convert.printInt();
-	out << "float: ";
-	convert.printFloat();
-	out << "double: ";
-	convert.printDouble();
-	return (out);
+	if (type == INVALID)
+		return ;
+	std::cout << "char: ";
+	ScalarConvert::printChar(type, c, i);
+	std::cout << "int: ";
+	ScalarConvert::printInt(type, c, i);
+	std::cout << "float: ";
+	ScalarConvert::printFloat(type, str, i, f, d);
+	std::cout << "double: ";
+	ScalarConvert::printDouble(type, str, i, f, d);
 }

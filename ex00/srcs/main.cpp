@@ -6,7 +6,7 @@
 /*   By: thibaultgiraudon <thibaultgiraudon@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 09:46:34 by thibaultgir       #+#    #+#             */
-/*   Updated: 2023/09/13 11:46:52 by thibaultgir      ###   ########.fr       */
+/*   Updated: 2023/09/19 16:53:21 by thibaultgir      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,5 @@ int main(int argc, char **argv)
 	}
 	ScalarConvert convert;
 	convert.convert(argv[1]);
-	std::cout << convert << std::endl;
 	return (0);
 }
