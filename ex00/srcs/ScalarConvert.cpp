@@ -6,11 +6,12 @@
 /*   By: thibaultgiraudon <thibaultgiraudon@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 13:11:57 by thibaultgir       #+#    #+#             */
-/*   Updated: 2023/09/19 17:01:47 by thibaultgir      ###   ########.fr       */
+/*   Updated: 2023/09/19 17:18:01 by thibaultgir      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ScalarConvert.hpp"
+#include <iomanip>
 
 ScalarConvert::ScalarConvert( void ) {
 	// std::cout << "[ SCALARCONVERT ] Constructor called" << std::endl;
@@ -117,7 +118,7 @@ void	ScalarConvert::printFloat( int type, std::string str, int i, float f, doubl
 		else
 			std::cout << str << std::endl;
 	}
-	else if (d != f)
+	else if (abs(d - f) > 0.0001)
 		std::cout << "overflow" << std::endl;
 	else if (f - i == 0)
 		std::cout << f << ".0f" << std::endl;
@@ -177,7 +178,7 @@ void ScalarConvert::convert( std::string str ) {
 			c = static_cast<char>(d);
 			i = static_cast<int>(d);
 			f = static_cast<float>(d);
-			if (d != f)
+			if (abs(d - f) > 0.0001)
 			{
 				std::cout << "[ ERROR ] : float overflow" << std::endl;
 				return ;
@@ -206,6 +207,7 @@ void ScalarConvert::convert( std::string str ) {
 	}
 	if (type == INVALID)
 		return ;
+
 	std::cout << "char: ";
 	ScalarConvert::printChar(type, c, i);
 	std::cout << "int: ";
