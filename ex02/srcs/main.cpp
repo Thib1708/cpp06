@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thibaultgiraudon <thibaultgiraudon@stud    +#+  +:+       +#+        */
+/*   By: tgiraudo <tgiraudo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 16:10:33 by thibaultgir       #+#    #+#             */
-/*   Updated: 2023/09/19 17:51:35 by thibaultgir      ###   ########.fr       */
+/*   Updated: 2023/09/27 15:58:47 by tgiraudo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,42 +37,35 @@ Base * generate( void ) {
 
 void	identify(Base* p)
 {
+	if(dynamic_cast<A *>(p))
+		std::cout << "Base type is A" << std::endl;
+	if(dynamic_cast<B *>(p))
+		std::cout << "Base type is B" << std::endl;
+	if(dynamic_cast<C *>(p))
+		std::cout << "Base type is C" << std::endl;
+}
+
+void	identify(Base& p)
+{
 	try
 	{
-		if (dynamic_cast<A *>(p))
+		if (dynamic_cast<A *>(&p))
 			std::cout << "Base type is A" << std::endl;
 	}
 	catch(std::exception& e){}
 	try
 	{
-		if (dynamic_cast<B *>(p))
+		if (dynamic_cast<B *>(&p))
 			std::cout << "Base type is B" << std::endl;
 	}
 	catch(std::exception& e){}
 	try
 	{
-		if (dynamic_cast<C *>(p))
+		if (dynamic_cast<C *>(&p))
 			std::cout << "Base type is C" << std::endl;
 	}
 	catch(std::exception& e){}
-	
-	
-	// if(dynamic_cast<A *>(p))
-	// 	std::cout << "Base type is A" << std::endl;
-	// else if(dynamic_cast<B *>(p))
-	// 	std::cout << "Base type is B" << std::endl;
-	// else if(dynamic_cast<C *>(p))
-	// 	std::cout << "Base type is C" << std::endl;
-}
 
-void	identify(Base& p)
-{
-	if(dynamic_cast<A *>(&p))
-		std::cout << "Base type is A" << std::endl;
-	if(dynamic_cast<B *>(&p))
-		std::cout << "Base type is B" << std::endl;
-	if(dynamic_cast<C *>(&p))
-		std::cout << "Base type is C" << std::endl;
 }
 
 int main()
