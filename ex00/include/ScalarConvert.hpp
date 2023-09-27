@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ScalarConvert.hpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thibaultgiraudon <thibaultgiraudon@stud    +#+  +:+       +#+        */
+/*   By: tgiraudo <tgiraudo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 13:11:57 by thibaultgir       #+#    #+#             */
-/*   Updated: 2023/09/19 17:37:35 by thibaultgir      ###   ########.fr       */
+/*   Updated: 2023/09/27 15:46:19 by tgiraudo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 
 #include <iostream>
 #include <sstream>
+#include <limits>
+#include <cmath>
 #include <stdlib.h>
 
 # define RESET		"\033[0m"
